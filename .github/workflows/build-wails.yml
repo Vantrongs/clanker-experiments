@@ -27,14 +27,20 @@ jobs:
     runs-on: ${{ matrix.build.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
         with:
           submodules: recursive
+
+      - name: Check out a repository with Browser mocks
+        uses: actions/checkout@v7
+        with:
+          repository: "kaede-basement/clanker-experiments"
+          path: "clanker-experiments"
 
       - name: Swap placeholder exports with actual Wails-only utils
         run: |
           rm -rf ./src/lib/wails
-          mv ./src/lib/__wails ./src/lib/wails
+          mv $GITHUB_WORKSPACE/clanker-experiments/src/lib/__wails ./src/lib/wails
         shell: bash
 
       - name: Setup bun
