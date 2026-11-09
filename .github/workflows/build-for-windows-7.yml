@@ -18,6 +18,8 @@ env:
   RUSTUP_TOOLCHAIN: "nightly-2026-06-28"
   VITE_BUILD_TARGET: "chrome109"
   WIN7_TARGET: "x86_64-win7-windows-msvc"
+  # Artifact names cannot contain '/', which a pull request's 'github.ref_name' ('29/merge') has
+  ARTIFACT_REF: ${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || github.ref_name }}
   # Edge/WebView2 109.0.1518.140 (the last Windows 7-compatible version)
   WEBVIEW2_RUNTIME_URL: "https://github.com/kaede-basement/webview-109-cab/raw/refs/heads/main/microsoftedgestandaloneinstallerx64_1c890b4b8dd6b7c93da98ebdc08ecdc5e30e50cb.exe"
   WEBVIEW2_RUNTIME_SHA256: "EAC95C8095EC5F9971EADE9827D8FB67FD251F5C16E702B5312D31067E39119B"
@@ -168,7 +170,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           if-no-files-found: "warn"
-          name: "${{ steps.json_properties.outputs.productName }}-win7-portable-${{ steps.json_properties.outputs.version }}-${{ github.ref_name }}"
+          name: "${{ steps.json_properties.outputs.productName }}-win7-portable-${{ steps.json_properties.outputs.version }}-${{ env.ARTIFACT_REF }}"
           path: "portable-build/"
 
       # Release-only
@@ -257,7 +259,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           if-no-files-found: "warn"
-          name: "${{ steps.json_properties.outputs.productName }}-win7-portable-full-${{ steps.json_properties.outputs.version }}-${{ github.ref_name }}"
+          name: "${{ steps.json_properties.outputs.productName }}-win7-portable-full-${{ steps.json_properties.outputs.version }}-${{ env.ARTIFACT_REF }}"
           path: "portable-build/"
 
       # Release-only
